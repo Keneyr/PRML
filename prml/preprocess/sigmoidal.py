@@ -37,6 +37,10 @@ class SigmoidalFeature(object):
     def _sigmoid(self, x, mean):
         return np.tanh((x - mean) @ self.coef * 0.5) * 0.5 + 0.5
 
+    """
+    return the basis function vlaues, e.g.:
+    let x = 1, mu = 1, s = 0.1, then return 1 / (1 + exp{-(1-1)/0.1})
+    """
     def transform(self, x):
         """
         transform input array with sigmoidal features

@@ -5,7 +5,7 @@ from prml.rv.rv import RandomVariable
 
 np.seterr(all="ignore")
 
-
+# Gamma distribution, not Gamma function
 class Gamma(RandomVariable):
     """
     Gamma distribution

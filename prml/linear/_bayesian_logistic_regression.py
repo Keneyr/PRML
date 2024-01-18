@@ -73,12 +73,14 @@ class BayesianLogisticRegression(LogisticRegression):
         for _ in range(max_iter):
             w_prev = np.copy(w)
             y = self._sigmoid(x_train @ w)
+            # add the prior to gradient and hessian matrix, ?
             grad = (
                 x_train.T @ (y - y_train)
                 + self.w_precision @ (w - self.w_mean)
             )
             hessian = (x_train.T * y * (1 - y)) @ x_train + self.w_precision
             try:
+                #  iterative reweighted least squares
                 w -= np.linalg.solve(hessian, grad)
             except np.linalg.LinAlgError:
                 break

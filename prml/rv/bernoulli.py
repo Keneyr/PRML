@@ -64,6 +64,7 @@ class Bernoulli(RandomVariable):
             return None
 
     def _fit(self, X):
+        # mu has beta distribution
         if isinstance(self.mu, Beta):
             self._bayes(X)
         elif isinstance(self.mu, RandomVariable):
@@ -72,8 +73,9 @@ class Bernoulli(RandomVariable):
             self._ml(X)
 
     def _ml(self, X):
-        n_zeros = np.count_nonzero((X == 0).astype(np.int))
-        n_ones = np.count_nonzero((X == 1).astype(np.int))
+        # Counts the number of non-zero values in the array a.
+        n_zeros = np.count_nonzero((X == 0).astype(int))
+        n_ones = np.count_nonzero((X == 1).astype(int))
         assert X.size == n_zeros + n_ones, (
             "{X.size} is not equal to {n_zeros} plus {n_ones}"
         )
@@ -90,7 +92,8 @@ class Bernoulli(RandomVariable):
         n_ones = n_ones + self.mu.n_ones
         n_zeros = n_zeros + self.mu.n_zeros
         self.prob = (n_ones - 1) / (n_ones + n_zeros - 2)
-
+    
+    # after the observation of data X, the parameters: [a,b] of mu has changed
     def _bayes(self, X):
         assert isinstance(self.mu, Beta)
         assert X.shape[1:] == self.mu.shape
@@ -112,12 +115,12 @@ class Bernoulli(RandomVariable):
         if isinstance(self.mu, np.ndarray):
             return (
                 self.mu > np.random.uniform(size=(sample_size,) + self.shape)
-            ).astype(np.int)
+            ).astype(int)
         elif isinstance(self.mu, Beta):
             return (
                 self.mu.n_ones / (self.mu.n_ones + self.mu.n_zeros)
                 > np.random.uniform(size=(sample_size,) + self.shape)
-            ).astype(np.int)
+            ).astype(int)
         elif isinstance(self.mu, RandomVariable):
             return (
                 self.mu.draw(sample_size)

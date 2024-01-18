@@ -32,13 +32,19 @@ class LogisticRegression(Classifier):
         max_iter : int, optional
             maximum number of parameter update iteration (the default is 100)
         """
+        # given a initial value to w
         w = np.zeros(np.size(x_train, 1))
         for _ in range(max_iter):
             w_prev = np.copy(w)
             y = self._sigmoid(x_train @ w)
+            """
+            gradient: \phi^T (y-t)
+            hessian matrix: \phi^T R \phi, R = y(1-y)
+            """
             grad = x_train.T @ (y - y_train)
             hessian = (x_train.T * y * (1 - y)) @ x_train
             try:
+                # w_new = w_old - H^{-1} gradient,  iterative reweighted least squares
                 w -= np.linalg.solve(hessian, grad)
             except np.linalg.LinAlgError:
                 break

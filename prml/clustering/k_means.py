@@ -24,9 +24,11 @@ class KMeans(object):
             center of each cluster
         """
         I = np.eye(self.n_clusters)
+        # randomly choose centers
         centers = X[np.random.choice(len(X), self.n_clusters, replace=False)]
         for _ in range(iter_max):
             prev_centers = np.copy(centers)
+            # calculate the distance to each center
             D = cdist(X, centers)
             cluster_index = np.argmin(D, axis=1)
             cluster_index = I[cluster_index]

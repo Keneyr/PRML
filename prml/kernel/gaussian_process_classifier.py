@@ -25,6 +25,7 @@ class GaussianProcessClassifier(object):
             X = X[:, None]
         self.X = X
         self.t = t
+        # gram matrix
         Gram = self.kernel(X, X)
         self.covariance = Gram + np.eye(len(Gram)) * self.noise_level
         self.precision = np.linalg.inv(self.covariance)

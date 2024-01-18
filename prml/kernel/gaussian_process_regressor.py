@@ -1,6 +1,6 @@
 import numpy as np
 
-
+# gaussian process regression
 class GaussianProcessRegressor(object):
 
     def __init__(self, kernel, beta=1.):
@@ -50,18 +50,22 @@ class GaussianProcessRegressor(object):
         self.X = X
         self.t = t
         I = np.eye(len(X))
+        # gram matrix: consider prior distribution of w, and the beta noise distribution from y to t
         Gram = self.kernel(X, X)
         self.covariance = Gram + I / self.beta
         self.precision = np.linalg.inv(self.covariance)
+        # gradient descent algorithm to update the parameters
         for i in range(iter_max):
             gradients = self.kernel.derivatives(X, X)
             updates = np.array(
                 [-np.trace(self.precision.dot(grad)) + t.dot(self.precision.dot(grad).dot(self.precision).dot(t)) for grad in gradients])
             for j in range(iter_max):
                 self.kernel.update_parameters(learning_rate * updates)
+                # update gram matrix
                 Gram = self.kernel(X, X)
                 self.covariance = Gram + I / self.beta
                 self.precision = np.linalg.inv(self.covariance)
+                # maximum log likelihood
                 log_like = self.log_likelihood()
                 if log_like > log_likelihood_list[-1]:
                     log_likelihood_list.append(log_like)

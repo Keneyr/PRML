@@ -39,16 +39,32 @@ class FishersLinearDiscriminant(Classifier):
         """
         x0 = x_train[y_train == 0]
         x1 = x_train[y_train == 1]
+        # get the mean vectors of two classes
         m0 = np.mean(x0, axis=0)
         m1 = np.mean(x1, axis=0)
+        # get the within-class covariance matrix S_W
         cov_inclass = np.cov(x0, rowvar=False) + np.cov(x1, rowvar=False)
+        # w \propto S_W^{-1}(m_1-m_0)
         self.w = np.linalg.solve(cov_inclass, m1 - m0)
+        # normalize w
         self.w /= np.linalg.norm(self.w).clip(min=1e-10)
 
+        #????
         g0 = Gaussian()
         g0.fit((x0 @ self.w))
         g1 = Gaussian()
         g1.fit((x1 @ self.w))
+        """
+        np.roots()
+        find the roots of a polynomial equation. 
+        Given the coefficients of a polynomial, this function returns an array containing the roots of the polynomial.
+            e.g.
+            coefficients = [1, 0, -4]
+            s = np.roots(coefficients)
+            -4 * x^0 + 0 * x^1 + 1 * x^2 = 0
+            --->
+            x^2 - 4 = 0
+        """
         root = np.roots([
             g1.var - g0.var,
             2 * (g0.var * g1.mu - g1.var * g0.mu),
@@ -88,4 +104,4 @@ class FishersLinearDiscriminant(Classifier):
         np.ndarray
             binary class for each input (N,)
         """
-        return (x @ self.w > self.threshold).astype(np.int)
+        return (x @ self.w > self.threshold).astype(int)

@@ -2,7 +2,7 @@ import numpy as np
 
 from prml.linear._bayesian_regression import BayesianRegression
 
-
+# https://en.wikipedia.org/wiki/Empirical_Bayes_method
 class EmpiricalBayesRegression(BayesianRegression):
     """Empirical Bayes Regression model.
 

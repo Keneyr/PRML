@@ -131,6 +131,7 @@ class MultivariateGaussianMixture(RandomVariable):
 
     def _fit(self, X):
         cov = np.cov(X.T)
+        # KMeans cluster
         kmeans = KMeans(self.n_components)
         kmeans.fit(X)
         self.mu = kmeans.centers
@@ -142,6 +143,7 @@ class MultivariateGaussianMixture(RandomVariable):
              self.coef.ravel())
         )
         while True:
+            # EM Algorithm
             stats = self._expectation(X)
             self._maximization(X, stats)
             new_params = np.hstack(

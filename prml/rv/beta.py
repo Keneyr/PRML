@@ -14,8 +14,8 @@ class Beta(RandomVariable):
       * mu^(n_ones - 1) * (1 - mu)^(n_zeros - 1)
       / gamma(n_ones) / gamma(n_zeros)
     """
-
-    def __init__(self, n_zeros, n_ones):
+    # n_ones: a, n_zeros: b
+    def __init__(self, n_ones, n_zeros):
         """
         construct beta distribution
 

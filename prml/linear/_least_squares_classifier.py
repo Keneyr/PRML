@@ -3,7 +3,10 @@ import numpy as np
 from prml.linear._classifier import Classifier
 from prml.preprocess.label_transformer import LabelTransformer
 
-
+"""
+The same as Aw = b, w = A^{-1}b,
+the only difference is b is classification lables as one-of-k
+"""
 class LeastSquaresClassifier(Classifier):
     """Least squares classifier model.
 
@@ -50,4 +53,5 @@ class LeastSquaresClassifier(Classifier):
         np.ndarray
             class index for each input (N,)
         """
+        # axis = -1 typically means that the operation should be applied along the last axis.
         return np.argmax(x @ self.w, axis=-1)

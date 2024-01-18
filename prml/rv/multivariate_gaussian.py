@@ -87,6 +87,12 @@ class MultivariateGaussian(RandomVariable):
 
     def _fit(self, X):
         self.mu = np.mean(X, axis=0)
+        """
+        np.cov(m), each row of m represents a variable, 
+        each column a single observation of all those variables.
+        a sigle observation is x_1 or x_2 data in X = [x_1, x_2, x_N]
+        numpy.atleast_2d, View inputs as arrays with at least two dimensions.
+        """
         self.cov = np.atleast_2d(np.cov(X.T, bias=True))
 
     def _pdf(self, X):

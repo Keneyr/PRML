@@ -1,7 +1,9 @@
 from contextlib import contextmanager
 from prml.nn.array.array import Array
 
-
+"""
+basic neural network: parameter
+"""
 class Network(object):
 
     def __init__(self):

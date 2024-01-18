@@ -30,6 +30,10 @@ class GaussianFeature(object):
     def _gauss(self, x, mean):
         return np.exp(-0.5 * np.sum(np.square(x - mean), axis=-1) / self.var)
 
+    """
+    returns the basis function values, e.g.
+    let x = 1, mu = 1, s^2 = 0.1, then the basis function value is : exp{- (1-1)^2  / (2 * 0.1)}
+    """
     def transform(self, x):
         """
         transform input array with gaussian features

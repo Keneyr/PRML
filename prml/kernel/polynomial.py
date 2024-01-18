@@ -21,7 +21,7 @@ class PolynomialKernel(Kernel):
         """
         self.const = const
         self.degree = degree
-
+    # k(x, x') = (x @ x' + c)^M, polynomial kernel function
     def __call__(self, x, y, pairwise=True):
         """
         calculate pairwise polynomial kernel

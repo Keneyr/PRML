@@ -27,7 +27,7 @@ class Gaussian(Distribution):
     def _log_pdf(self, x):
         return GaussianLogPDF().forward(x, self.mean, self.std)
 
-
+# N(x | mean, std^2)
 class GaussianLogPDF(Function):
     enable_auto_broadcast = True
     log2pi = np.log(2 * np.pi)

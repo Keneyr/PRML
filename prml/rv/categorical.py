@@ -5,7 +5,7 @@ from prml.rv.dirichlet import Dirichlet
 
 class Categorical(RandomVariable):
     """
-    Categorical distribution
+    Categorical distribution(multinomial distribution)
     p(x|mu) = prod_k mu_k^x_k
     """
 
@@ -87,7 +87,7 @@ class Categorical(RandomVariable):
         assert isinstance(self.mu, Dirichlet)
         alpha = self.mu.alpha + X.sum(axis=0)
         self.mu = (alpha - 1) / (alpha - 1).sum()
-
+    # after the observation of data X, the multinomial distribution mu's control parameter has changed
     def _bayes(self, X):
         self._check_input(X)
         assert isinstance(self.mu, Dirichlet)

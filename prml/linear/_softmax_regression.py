@@ -16,6 +16,9 @@ class SoftmaxRegression(Classifier):
     t ~ Categorical(t|y)
     """
 
+    """
+    exp(a_k) / sum_j exp(a_j)
+    """
     @staticmethod
     def _softmax(a):
         a_max = np.max(a, axis=-1, keepdims=True)
@@ -50,6 +53,7 @@ class SoftmaxRegression(Classifier):
         for _ in range(max_iter):
             w_prev = np.copy(w)
             y = self._softmax(x_train @ w)
+            # gradient descent update
             grad = x_train.T @ (y - y_train)
             w -= learning_rate * grad
             if np.allclose(w, w_prev):

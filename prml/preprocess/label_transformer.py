@@ -43,6 +43,12 @@ class LabelTransformer(object):
             one-of-k encoding of input
         """
         if self.n_classes is None:
+            """
+            np.max(): find the maximum value along a specified axis or in a given array, e.g.
+                arr = np.array([1, 3, 5, 2, 4])
+                max_value = np.max(arr)
+                print(max_value)  # Output: 5
+            """
             self.n_classes = np.max(class_indices) + 1
 
         return self.encoder[class_indices]
@@ -62,4 +68,10 @@ class LabelTransformer(object):
             class index
         """
 
+        """
+        np.argmax(): returns the indices of the maximum values along a specified axis in an array, e.g.
+            arr = np.array([1, 3, 5, 2, 4])
+            index_of_max_value = np.argmax(arr)
+            print(index_of_max_value)  # Output: 2 (index of the maximum value '5')
+        """
         return np.argmax(onehot, axis=1)

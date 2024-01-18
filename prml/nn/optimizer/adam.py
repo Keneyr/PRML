@@ -2,7 +2,9 @@ import numpy as np
 from prml.nn.config import config
 from prml.nn.optimizer.optimizer import Optimizer
 
-
+"""
+Variants of Stochastic gradient descent: https://en.wikipedia.org/wiki/Stochastic_gradient_descent#Adam
+"""
 class Adam(Optimizer):
     """
     Adam optimizer

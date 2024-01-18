@@ -5,10 +5,11 @@ from prml.linear._regression import Regression
 
 class BayesianRegression(Regression):
     """Bayesian regression model.
-
-    w ~ N(w|0, alpha^(-1)I)
-    y = X @ w
-    t ~ N(t|X @ w, beta^(-1))
+    prior probability:
+        w ~ N(w|0, alpha^(-1)I)
+        y = X @ w
+    observed data, also means the samples of the virtual whole data, thus we can use likelihood function
+        t ~ N(t|X @ w, beta^(-1))
     """
 
     def __init__(self, alpha: float = 1., beta: float = 1.):
@@ -29,10 +30,12 @@ class BayesianRegression(Regression):
     def _is_prior_defined(self) -> bool:
         return self.w_mean is not None and self.w_precision is not None
 
+    # prior distribution
     def _get_prior(self, ndim: int) -> tuple:
         if self._is_prior_defined():
             return self.w_mean, self.w_precision
         else:
+            # mean: zero, precesion: alpha
             return np.zeros(ndim), self.alpha * np.eye(ndim)
 
     def fit(self, x_train: np.ndarray, y_train: np.ndarray):
@@ -44,14 +47,17 @@ class BayesianRegression(Regression):
             training data independent variable (N, n_features)
         y_train :  np.ndarray
             training data dependent variable
+            
         """
+        # the prior distribution of w: p(w|alpha) = N(w|0,alpha^-1 I)
         mean_prev, precision_prev = self._get_prior(np.size(x_train, 1))
-
+        # https://en.wikipedia.org/wiki/Bayesian_linear_regression
         w_precision = precision_prev + self.beta * x_train.T @ x_train
         w_mean = np.linalg.solve(
             w_precision,
             precision_prev @ mean_prev + self.beta * x_train.T @ y_train,
         )
+        # the distribution of w has the mean as w_mean
         self.w_mean = w_mean
         self.w_precision = w_precision
         self.w_cov = np.linalg.inv(self.w_precision)
@@ -91,6 +97,8 @@ class BayesianRegression(Regression):
             return y_sample
         y = x @ self.w_mean
         if return_std:
+            # s^2(x) = beta^-1 + Φ(x)^T @ S @ Φ(x)
+            # ??
             y_var = 1 / self.beta + np.sum(x @ self.w_cov * x, axis=1)
             y_std = np.sqrt(y_var)
             return y, y_std

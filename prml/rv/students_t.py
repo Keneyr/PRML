@@ -79,17 +79,22 @@ class StudentsT(RandomVariable):
             return self.mu.shape
         else:
             return None
-
+    # ?????
     def _fit(self, X, learning_rate=0.01):
         self.mu = np.mean(X, axis=0)
         self.tau = 1 / np.var(X, axis=0)
         self.dof = 1
+        """
+        np.ravel(): Return a contiguous flattened array.
+        np.hstack(): Stack arrays in sequence horizontally (column wise).
+        """
         params = np.hstack(
             (self.mu.ravel(),
              self.tau.ravel(),
              self.dof)
         )
         while True:
+            # EM Algorithm
             E_eta, E_lneta = self._expectation(X)
             self._maximization(X, E_eta, E_lneta, learning_rate)
             new_params = np.hstack(
@@ -120,7 +125,7 @@ class StudentsT(RandomVariable):
             - N * digamma(0.5 * self.dof)
             + np.sum(E_lneta - E_eta, axis=0)
         )
-
+    # https://en.wikipedia.org/wiki/Student%27s_t-distribution
     def _pdf(self, X):
         d = X - self.mu
         D_sq = self.tau * d ** 2

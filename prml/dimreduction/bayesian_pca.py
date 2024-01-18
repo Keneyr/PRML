@@ -1,7 +1,11 @@
 import numpy as np
 from prml.dimreduction.pca import PCA
 
-
+"""
+@keneyr: decide the M dimension by evidence approximation
+    still EM Algorithm, the only difference is W_new formula, since we suppose W has prior distribution: 
+    p(W | alpha) = N()
+"""
 class BayesianPCA(PCA):
 
     def fit(self, X, iter_max=100, initial="random"):
@@ -44,6 +48,9 @@ class BayesianPCA(PCA):
                 break
         self.n_iter = i + 1
 
+    """
+    @keneyr: W_new = ... is the only difference equation from EM Algorithm
+    """
     def _maximization(self, X, Ez, Ezz):
         self.W = X.T @ Ez @ np.linalg.inv(np.sum(Ezz, axis=0) + self.var * np.diag(self.alpha))
         self.var = np.mean(

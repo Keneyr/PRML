@@ -60,6 +60,7 @@ class Gaussian(RandomVariable):
             self.parameter["var"] = None
             self.parameter["tau"] = None
 
+    # tau = 1/sigma^2
     @property
     def tau(self):
         return self.parameter["tau"]
@@ -133,6 +134,7 @@ class Gaussian(RandomVariable):
             / (N * self.mu.tau + self.tau)
         )
 
+    # assume sigma is known, infer mu
     def _bayes_mu(self, X):
         N = len(X)
         mu = np.mean(X, 0)
@@ -141,7 +143,7 @@ class Gaussian(RandomVariable):
             mu=(self.mu.mu * self.mu.tau + N * mu * self.tau) / tau,
             tau=tau
         )
-
+    # assume mu is known, infer sigma
     def _bayes_tau(self, X):
         N = len(X)
         var = np.var(X, axis=0)

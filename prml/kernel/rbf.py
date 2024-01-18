@@ -1,7 +1,7 @@
 import numpy as np
 from prml.kernel.kernel import Kernel
 
-
+# radial baisis kernel function
 class RBF(Kernel):
 
     def __init__(self, params):
@@ -53,6 +53,6 @@ class RBF(Kernel):
         delta = np.exp(-0.5 * np.sum(d, axis=-1))
         deltas = -0.5 * (x - y) ** 2 * (delta * self.params[0])[:, :, None]
         return np.concatenate((np.expand_dims(delta, 0), deltas.T))
-
+    # w_new = w + learning_rate * gradient
     def update_parameters(self, updates):
         self.params += updates
